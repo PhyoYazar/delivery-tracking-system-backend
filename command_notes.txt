@@ -1,0 +1,16 @@
+### prisma
+
+=> npx prisma migrate dev --name "init"
+
+=> npx prisma db seed
+
+=> npx prisma studio
+
+
+### nestjs
+
+=> npx nest generate resource
+
+=> npx nest generate controller (nest g co)
+=> npx nest generate module prisma
+=> npx nest generate service prisma
