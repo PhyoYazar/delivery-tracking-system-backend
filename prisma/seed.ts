@@ -28,6 +28,74 @@ async function main() {
   });
 
   console.log(post1, post2);
+
+  // const sender = await prisma.user.create({
+  //   data: {
+  //     name: 'yarzar',
+  //     phone_number: '09789529686',
+  //     address: 'NO.123, br nyr',
+
+  //     township: 'Tarmwe',
+  //     city: 'Yangon',
+  //     role: 'SENDER',
+  //   },
+  // });
+
+  // const receiver = await prisma.user.create({
+  //   data: {
+  //     name: 'jeedi',
+  //     phone_number: '09123456789',
+  //     address: 'NO.123, br nyr',
+
+  //     township: 'Hlaing',
+  //     city: 'Yangon',
+  //     role: 'RECEIVER',
+  //   },
+  // });
+
+  // const deliver = await prisma.user.create({
+  //   data: {
+  //     name: 'rayleigh',
+  //     phone_number: '09987654321',
+  //     address: 'NO.123, br nyr',
+
+  //     township: 'Alone',
+  //     city: 'Yangon',
+  //     role: 'DELIVER',
+  //   },
+  // });
+
+  // const location = await prisma.location.create({
+  //   data: {
+  //     latitude: '30.2343',
+  //     longitude: '130.2343',
+  //   },
+  // });
+
+  const user4 = await prisma.user.create({
+    data: {
+      name: 'test',
+      phone_number: '09888888888',
+      address: 'NO.123, br nyr',
+
+      township: 'Bahan',
+      city: 'Yangon',
+      role: 'SENDER',
+
+      parcels: {
+        create: [
+          {
+            price: 200,
+            picked_up: false,
+            arrived_warehouse: false,
+            finish: false,
+
+            location_id: 'f3fae8c9-cbf4-434d-8700-70743e1e930a',
+          },
+        ],
+      },
+    },
+  });
 }
 
 main()

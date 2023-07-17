@@ -19,3 +19,47 @@ model Article {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
+
+enum Role {
+  SENDER
+  RECEIVER
+  PICKER
+  DELIVER
+}
+model User {
+  created_at   DateTime      @default(now())
+  name         String
+  phone_number String
+  address      String
+  township     String
+  city         String
+  role         Role
+  parcels      Parcel[]
+
+  @@id([name, phone_number])
+}
+
+model Parcel {
+  id                String        @id     @default(uuid())
+  created_at        DateTime      @default(now())
+  price             Int
+  picked_up         Boolean
+  arrived_warehouse Boolean
+  finish            Boolean
+
+  user              User       @relation(fields: [user_name, user_phone_number], references: [name, phone_number])
+  user_name         String
+  user_phone_number String
+
+  location          Location   @relation(fields: [location_id], references: [id])
+  location_id       String
+}
+
+model Location {
+  id                String        @id     @default(uuid())
+  latitude          String
+  longitude         String
+  created_at        DateTime      @default(now())
+
+  parcels           Parcel[]
+}
