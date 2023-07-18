@@ -126,24 +126,24 @@ async function main() {
   //   },
   // });
 
-  //   const parcel = await prisma.parcel.create({
-  //     data: {
-  //       price: 200,
-  //       picked_up: false,
-  //       arrived_warehouse: false,
-  //       finish: false,
+  const parcel = await prisma.parcel.create({
+    data: {
+      price: 200,
+      picked_up: false,
+      arrived_warehouse: false,
+      finish: false,
 
-  //       receiver_name: 'receiver',
-  //       receiver_phone_number: '09222222222',
+      receiver_name: 'receiver',
+      receiver_phone_number: '09222222222',
 
-  //       sender_name: 'sender',
-  //       sender_phone_number: '09111111111',
+      sender_name: 'sender',
+      sender_phone_number: '09111111111',
 
-  //       user_id: 'b7e44be5-8b26-4330-9402-16ab6a2f5358',
+      user_id: null,
 
-  //       location_id: '23a644df-7f43-46da-ba32-ddd9b08ab0b3',
-  //     },
-  //   });
+      location_id: null,
+    },
+  });
 }
 
 main()

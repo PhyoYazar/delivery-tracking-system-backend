@@ -52,6 +52,7 @@ model Receiver {
 model User {
   id           String        @id     @default(uuid())
   created_at   DateTime      @default(now())
+  // updatedAt    DateTime      @updatedAt
   name         String
   phone_number String
   address      String
@@ -64,24 +65,25 @@ model User {
 model Parcel {
   id                    String        @id     @default(uuid())
   created_at            DateTime      @default(now())
+  // updatedAt             DateTime      @updatedAt
   price                 Int
-  picked_up             Boolean
-  arrived_warehouse     Boolean
-  finish                Boolean
+  picked_up             Boolean       @default(false)
+  arrived_warehouse     Boolean       @default(false)
+  finish                Boolean       @default(false)
 
-  sender                Sender?       @relation(fields: [sender_name, sender_phone_number], references: [name, phone_number],onDelete: Cascade, onUpdate: Cascade)
+  sender                Sender       @relation(fields: [sender_name, sender_phone_number], references: [name, phone_number],onDelete: Cascade, onUpdate: Cascade)
   sender_name           String
   sender_phone_number   String
 
-  receiver              Receiver?       @relation(fields: [receiver_name, receiver_phone_number], references: [name, phone_number],onDelete: Cascade, onUpdate: Cascade)
+  receiver              Receiver       @relation(fields: [receiver_name, receiver_phone_number], references: [name, phone_number],onDelete: Cascade, onUpdate: Cascade)
   receiver_name         String
   receiver_phone_number String
 
   user                  User?       @relation(fields: [user_id], references: [id],onDelete: Cascade, onUpdate: Cascade)
-  user_id               String
+  user_id               String?
 
   location              Location?   @relation(fields: [location_id], references: [id],onDelete: Cascade, onUpdate: Cascade)
-  location_id           String
+  location_id           String?
 }
 
 model Location {
