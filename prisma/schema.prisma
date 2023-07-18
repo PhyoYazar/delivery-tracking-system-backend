@@ -21,12 +21,36 @@ model Article {
 }
 
 enum Role {
-  SENDER
-  RECEIVER
-  PICKER
-  DELIVER
+  deliver
+  admin
 }
+
+model Sender {
+  created_at   DateTime      @default(now())
+  name         String
+  phone_number String
+  address      String
+  township     String
+  city         String
+  parcels      Parcel[]
+
+  @@id([name, phone_number])
+}
+
+model Receiver {
+  created_at   DateTime      @default(now())
+  name         String
+  phone_number String
+  address      String
+  township     String
+  city         String
+  parcels      Parcel[]
+
+  @@id([name, phone_number])
+}
+
 model User {
+  id           String        @id     @default(uuid())
   created_at   DateTime      @default(now())
   name         String
   phone_number String
@@ -35,24 +59,29 @@ model User {
   city         String
   role         Role
   parcels      Parcel[]
-
-  @@id([name, phone_number])
 }
 
 model Parcel {
-  id                String        @id     @default(uuid())
-  created_at        DateTime      @default(now())
-  price             Int
-  picked_up         Boolean
-  arrived_warehouse Boolean
-  finish            Boolean
+  id                    String        @id     @default(uuid())
+  created_at            DateTime      @default(now())
+  price                 Int
+  picked_up             Boolean
+  arrived_warehouse     Boolean
+  finish                Boolean
 
-  user              User       @relation(fields: [user_name, user_phone_number], references: [name, phone_number])
-  user_name         String
-  user_phone_number String
+  sender                Sender?       @relation(fields: [sender_name, sender_phone_number], references: [name, phone_number],onDelete: Cascade, onUpdate: Cascade)
+  sender_name           String
+  sender_phone_number   String
 
-  location          Location   @relation(fields: [location_id], references: [id])
-  location_id       String
+  receiver              Receiver?       @relation(fields: [receiver_name, receiver_phone_number], references: [name, phone_number],onDelete: Cascade, onUpdate: Cascade)
+  receiver_name         String
+  receiver_phone_number String
+
+  user                  User?       @relation(fields: [user_id], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  user_id               String
+
+  location              Location?   @relation(fields: [location_id], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  location_id           String
 }
 
 model Location {
