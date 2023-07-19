@@ -8,17 +8,9 @@ export class CreateParcelDto {
 
   @IsString()
   @ApiProperty()
-  receiver_name: string;
+  receiver_id: string;
 
   @IsString()
   @ApiProperty()
-  receiver_phone_number: string;
-
-  @IsString()
-  @ApiProperty()
-  sender_name: string;
-
-  @IsString()
-  @ApiProperty()
-  sender_phone_number: string;
+  sender_id: string;
 }

@@ -41,7 +41,7 @@ export class ParcelController {
     const parcel = await this.parcelService.findOne(id);
 
     if (!parcel) {
-      throw new NotFoundException(`Article with id: ${id} not found`);
+      throw new NotFoundException(`Parcel with id: ${id} not found`);
     }
 
     return parcel;

@@ -16,32 +16,37 @@ CREATE TABLE "Article" (
 
 -- CreateTable
 CREATE TABLE "Sender" (
+    "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
     "phone_number" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "township" TEXT NOT NULL,
     "city" TEXT NOT NULL,
 
-    CONSTRAINT "Sender_pkey" PRIMARY KEY ("name","phone_number")
+    CONSTRAINT "Sender_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Receiver" (
+    "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
     "phone_number" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "township" TEXT NOT NULL,
     "city" TEXT NOT NULL,
 
-    CONSTRAINT "Receiver_pkey" PRIMARY KEY ("name","phone_number")
+    CONSTRAINT "Receiver_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
     "phone_number" TEXT NOT NULL,
     "address" TEXT NOT NULL,
@@ -56,16 +61,15 @@ CREATE TABLE "User" (
 CREATE TABLE "Parcel" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "price" INTEGER NOT NULL,
-    "picked_up" BOOLEAN NOT NULL,
-    "arrived_warehouse" BOOLEAN NOT NULL,
-    "finish" BOOLEAN NOT NULL,
-    "sender_name" TEXT NOT NULL,
-    "sender_phone_number" TEXT NOT NULL,
-    "receiver_name" TEXT NOT NULL,
-    "receiver_phone_number" TEXT NOT NULL,
-    "user_id" TEXT NOT NULL,
-    "location_id" TEXT NOT NULL,
+    "picked_up" BOOLEAN NOT NULL DEFAULT false,
+    "arrived_warehouse" BOOLEAN NOT NULL DEFAULT false,
+    "finish" BOOLEAN NOT NULL DEFAULT false,
+    "sender_id" TEXT NOT NULL,
+    "receiver_id" TEXT NOT NULL,
+    "user_id" TEXT,
+    "location_id" TEXT,
 
     CONSTRAINT "Parcel_pkey" PRIMARY KEY ("id")
 );
@@ -83,11 +87,17 @@ CREATE TABLE "Location" (
 -- CreateIndex
 CREATE UNIQUE INDEX "Article_title_key" ON "Article"("title");
 
--- AddForeignKey
-ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_sender_name_sender_phone_number_fkey" FOREIGN KEY ("sender_name", "sender_phone_number") REFERENCES "Sender"("name", "phone_number") ON DELETE CASCADE ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "Sender_name_phone_number_key" ON "Sender"("name", "phone_number");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Receiver_name_phone_number_key" ON "Receiver"("name", "phone_number");
 
 -- AddForeignKey
-ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_receiver_name_receiver_phone_number_fkey" FOREIGN KEY ("receiver_name", "receiver_phone_number") REFERENCES "Receiver"("name", "phone_number") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_sender_id_fkey" FOREIGN KEY ("sender_id") REFERENCES "Sender"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_receiver_id_fkey" FOREIGN KEY ("receiver_id") REFERENCES "Receiver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

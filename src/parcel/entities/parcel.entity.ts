@@ -9,6 +9,9 @@ export class ParcelEntity implements Parcel {
   created_at: Date;
 
   @ApiProperty()
+  updatedAt: Date;
+
+  @ApiProperty()
   price: number;
 
   @ApiProperty()
@@ -21,16 +24,10 @@ export class ParcelEntity implements Parcel {
   finish: boolean;
 
   @ApiProperty()
-  sender_name: string;
+  sender_id: string;
 
   @ApiProperty()
-  sender_phone_number: string;
-
-  @ApiProperty()
-  receiver_name: string;
-
-  @ApiProperty()
-  receiver_phone_number: string;
+  receiver_id: string;
 
   @ApiProperty({ required: false, nullable: true })
   user_id: string | null;
