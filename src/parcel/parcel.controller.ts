@@ -8,6 +8,7 @@ import {
   Delete,
   UseFilters,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { ParcelService } from './parcel.service';
 import { CreateParcelDto } from './dto/create-parcel.dto';
@@ -15,6 +16,7 @@ import { UpdateParcelDto } from './dto/update-parcel.dto';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { PrismaClientExceptionFilter } from 'src/prisma-client-exception/prisma-client-exception.filter';
 import { ParcelEntity } from './entities/parcel.entity';
+import { GetParcelDto } from './dto/get-parcel.dto';
 
 @Controller('parcels')
 @ApiTags('parcel')
@@ -30,8 +32,8 @@ export class ParcelController {
 
   @Get()
   @ApiCreatedResponse({ type: ParcelEntity, isArray: true })
-  findAll() {
-    return this.parcelService.findAll();
+  findAll(@Query() getParcelDto: GetParcelDto) {
+    return this.parcelService.findAll(getParcelDto);
   }
 
   @Get(':id')
