@@ -46,5 +46,13 @@ export class GetParcelDto {
     ({ value }) => [true, 'enabled', 'true', 1, '1'].indexOf(value) > -1,
   )
   @ApiProperty({ required: false })
+  deliver?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @Transform(
+    ({ value }) => [true, 'enabled', 'true', 1, '1'].indexOf(value) > -1,
+  )
+  @ApiProperty({ required: false })
   finish?: boolean;
 }

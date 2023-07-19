@@ -21,6 +21,9 @@ export class ParcelEntity implements Parcel {
   arrived_warehouse: boolean;
 
   @ApiProperty()
+  deliver: boolean;
+
+  @ApiProperty()
   finish: boolean;
 
   @ApiProperty()

@@ -42,6 +42,7 @@ export class ParcelService {
         price: getParcelDto.price,
         picked_up: getParcelDto.picked_up,
         arrived_warehouse: getParcelDto.arrived_warehouse,
+        deliver: getParcelDto.deliver,
         finish: getParcelDto.finish,
       },
 
