@@ -10,6 +10,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  deliver
+  admin
+  super_admin
+}
+
 model Article {
   id          Int           @id @default(autoincrement())
   title       String        @unique
@@ -20,12 +26,6 @@ model Article {
   updatedAt   DateTime      @updatedAt
 }
 
-enum Role {
-  deliver
-  admin
-  super_admin
-}
-
 model Sender {
   id           String        @id     @default(uuid())
   created_at   DateTime      @default(now())
@@ -33,8 +33,13 @@ model Sender {
   name         String
   phone_number String
   address      String
-  township     String
-  city         String
+
+  city         City          @relation(fields: [city_id], references: [id])
+  city_id      String
+
+  township     Township      @relation(fields: [township_id], references: [id])
+  township_id  String        @unique
+
   parcels      Parcel[]
 
   @@unique([name, phone_number])
@@ -47,8 +52,13 @@ model Receiver {
   name         String
   phone_number String
   address      String
-  township     String
-  city         String
+
+  city         City          @relation(fields: [city_id], references: [id])
+  city_id      String
+
+  township     Township      @relation(fields: [township_id], references: [id])
+  township_id  String        @unique
+
   parcels      Parcel[]
 
   @@unique([name, phone_number])
@@ -58,12 +68,21 @@ model User {
   id           String        @id     @default(uuid())
   created_at   DateTime      @default(now())
   updated_at   DateTime      @updatedAt
+
   name         String
   email        String        @unique
-  phone_number String
-  address      String
-  township     String
-  city         String
+  password     String
+  refresh_token      String?
+  phone_number String?
+
+  address      String?
+
+  city         City?          @relation(fields: [city_id], references: [id])
+  city_id      String
+
+  township     Township?      @relation(fields: [township_id], references: [id])
+  township_id  String
+
   role         Role
   parcels      Parcel[]
 }
@@ -72,7 +91,7 @@ model Parcel {
   id                    String        @id     @default(uuid())
   created_at            DateTime      @default(now())
   updated_at            DateTime      @updatedAt
-  price                 Int
+  price                 Decimal
   picked_up             Boolean       @default(false)
   arrived_warehouse     Boolean       @default(false)
   deliver               Boolean       @default(false)
@@ -103,4 +122,22 @@ model Location {
 model Township {
   id                String        @id     @default(uuid())
   name              String        @unique
+
+  city              City          @relation(fields: [city_id], references: [id])
+  city_id           String        @unique
+
+  user              User[]
+  sender            Sender[]
+  receiver          Receiver[]
+}
+
+model City {
+  id                String        @id     @default(uuid())
+  name              String        @unique
+
+  township          Township[]
+
+  user              User[]
+  sender            Sender[]
+  receiver          Receiver[]
 }
