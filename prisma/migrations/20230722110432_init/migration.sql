@@ -65,7 +65,7 @@ CREATE TABLE "Parcel" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "price" DECIMAL(65,30) NOT NULL,
+    "price" INTEGER NOT NULL,
     "picked_up" BOOLEAN NOT NULL DEFAULT false,
     "arrived_warehouse" BOOLEAN NOT NULL DEFAULT false,
     "deliver" BOOLEAN NOT NULL DEFAULT false,
@@ -91,6 +91,8 @@ CREATE TABLE "Location" (
 -- CreateTable
 CREATE TABLE "Township" (
     "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
     "city_id" TEXT NOT NULL,
 
@@ -100,6 +102,8 @@ CREATE TABLE "Township" (
 -- CreateTable
 CREATE TABLE "City" (
     "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "City_pkey" PRIMARY KEY ("id")
@@ -109,13 +113,7 @@ CREATE TABLE "City" (
 CREATE UNIQUE INDEX "Article_title_key" ON "Article"("title");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Sender_township_id_key" ON "Sender"("township_id");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Sender_name_phone_number_key" ON "Sender"("name", "phone_number");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Receiver_township_id_key" ON "Receiver"("township_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Receiver_name_phone_number_key" ON "Receiver"("name", "phone_number");
@@ -125,9 +123,6 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Township_name_key" ON "Township"("name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Township_city_id_key" ON "Township"("city_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "City_name_key" ON "City"("name");

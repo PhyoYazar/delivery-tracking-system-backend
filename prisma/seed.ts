@@ -27,51 +27,53 @@ async function main() {
     },
   });
 
-  console.log(post1, post2);
+  const yangonCity = await prisma.city.upsert({
+    where: { name: 'Yangon' },
+    update: {},
+    create: {
+      name: 'Yangon',
+    },
+  });
 
-  // const sender = await prisma.sender.create({
-  //   data: {
-  //     name: 'sender',
-  //     phone_number: '09111111111',
+  const tarmweTownship = await prisma.township.upsert({
+    where: { name: 'Tarmwe' },
+    update: {},
+    create: {
+      name: 'Tarmwe',
+      city_id: yangonCity.id,
+    },
+  });
 
-  //     address: 'NO.123, br nyr',
-  //     township: 'Tarmwe',
-  //     city: 'Yangon',
+  const aloneTownship = await prisma.township.upsert({
+    where: { name: 'Alone' },
+    update: {},
+    create: {
+      name: 'Alone',
+      city_id: yangonCity.id,
+    },
+  });
 
-  //     // parcels: {
-  //     //   create: [
-  //     //     {
-  //     //       price: 200,
-  //     //       picked_up: false,
-  //     //       arrived_warehouse: false,
-  //     //       finish: false,
-  //     //     },
-  //     //   ],
-  //     // },
-  //   },
-  // });
+  const sender = await prisma.sender.create({
+    data: {
+      name: 'sender',
+      phone_number: '011111',
 
-  // const receiver = await prisma.receiver.create({
-  //   data: {
-  //     name: 'receiver',
-  //     phone_number: '09222222222',
-  //     address: 'NO.123, br nyr',
+      address: 'NO.123, br nyr',
+      township_id: aloneTownship.id,
+      city_id: yangonCity.id,
+    },
+  });
 
-  //     township: 'Hlaing',
-  //     city: 'Yangon',
+  const receiver = await prisma.receiver.create({
+    data: {
+      name: 'receiver',
+      phone_number: '022222',
+      address: 'NO.1, hello str, dhh d br nyr',
 
-  //     // parcels: {
-  //     //   create: [
-  //     //     {
-  //     //       price: 200,
-  //     //       picked_up: false,
-  //     //       arrived_warehouse: false,
-  //     //       finish: false,
-  //     //     },
-  //     //   ],
-  //     // },
-  //   },
-  // });
+      township_id: tarmweTownship.id,
+      city_id: yangonCity.id,
+    },
+  });
 
   // const deliver = await prisma.user.create({
   //   data: {
@@ -82,17 +84,6 @@ async function main() {
   //     township: 'Alone',
   //     city: 'Yangon',
   //     role: 'deliver',
-
-  //     // parcels: {
-  //     //   create: [
-  //     //     {
-  //     //       price: 200,
-  //     //       picked_up: false,
-  //     //       arrived_warehouse: false,
-  //     //       finish: false,
-  //     //     },
-  //     //   ],
-  //     // },
   //   },
   // });
 
@@ -112,38 +103,32 @@ async function main() {
   //   data: {
   //     latitude: '30.2343',
   //     longitude: '130.2343',
-
-  //     // parcels: {
-  //     //   create: [
-  //     //     {
-  //     //       price: 200,
-  //     //       picked_up: false,
-  //     //       arrived_warehouse: false,
-  //     //       finish: false,
-  //     //     },
-  //     //   ],
-  //     // },
   //   },
   // });
 
-  // const parcel = await prisma.parcel.create({
-  //   data: {
-  //     price: 200,
-  //     picked_up: false,
-  //     arrived_warehouse: false,
-  //     finish: false,
+  const parcel = await prisma.parcel.create({
+    data: {
+      price: 200,
+      receiver_id: receiver.id,
 
-  //     receiver_name: 'receiver',
-  //     receiver_phone_number: '09222222222',
+      sender_id: sender.id,
 
-  //     sender_name: 'sender',
-  //     sender_phone_number: '09111111111',
+      user_id: null,
 
-  //     user_id: null,
+      location_id: null,
+    },
+  });
 
-  //     location_id: null,
-  //   },
-  // });
+  console.log(
+    post1,
+    post2,
+    yangonCity,
+    aloneTownship,
+    tarmweTownship,
+    sender,
+    receiver,
+    parcel,
+  );
 }
 
 main()

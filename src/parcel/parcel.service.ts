@@ -28,13 +28,17 @@ export class ParcelService {
           {
             sender: {
               AND: filterSenderReceiverArray,
-              township: getParcelDto.township,
+              township: {
+                name: getParcelDto.township,
+              },
             },
           },
           {
             receiver: {
               AND: filterSenderReceiverArray,
-              township: getParcelDto.township,
+              township: {
+                name: getParcelDto.township,
+              },
             },
           },
         ],

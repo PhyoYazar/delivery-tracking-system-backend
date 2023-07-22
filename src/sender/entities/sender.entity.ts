@@ -21,8 +21,8 @@ export class SenderEntity implements Sender {
   address: string;
 
   @ApiProperty()
-  township: string;
+  township_id: string;
 
   @ApiProperty()
-  city: string;
+  city_id: string;
 }
