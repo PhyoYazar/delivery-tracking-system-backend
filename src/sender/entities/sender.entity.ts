@@ -9,7 +9,7 @@ export class SenderEntity implements Sender {
   created_at: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  updated_at: Date;
 
   @ApiProperty()
   name: string;

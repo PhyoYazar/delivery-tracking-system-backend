@@ -23,12 +23,13 @@ model Article {
 enum Role {
   deliver
   admin
+  super_admin
 }
 
 model Sender {
   id           String        @id     @default(uuid())
   created_at   DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  updated_at   DateTime      @updatedAt
   name         String
   phone_number String
   address      String
@@ -42,7 +43,7 @@ model Sender {
 model Receiver {
   id           String        @id     @default(uuid())
   created_at   DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  updated_at   DateTime      @updatedAt
   name         String
   phone_number String
   address      String
@@ -56,8 +57,9 @@ model Receiver {
 model User {
   id           String        @id     @default(uuid())
   created_at   DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  updated_at   DateTime      @updatedAt
   name         String
+  email        String        @unique
   phone_number String
   address      String
   township     String
@@ -69,7 +71,7 @@ model User {
 model Parcel {
   id                    String        @id     @default(uuid())
   created_at            DateTime      @default(now())
-  updatedAt             DateTime      @updatedAt
+  updated_at            DateTime      @updatedAt
   price                 Int
   picked_up             Boolean       @default(false)
   arrived_warehouse     Boolean       @default(false)
@@ -100,5 +102,5 @@ model Location {
 
 model Township {
   id                String        @id     @default(uuid())
-  name              String
+  name              String        @unique
 }

@@ -9,7 +9,7 @@ export class ParcelEntity implements Parcel {
   created_at: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  updated_at: Date;
 
   @ApiProperty()
   price: number;
