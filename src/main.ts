@@ -27,6 +27,7 @@ async function bootstrap() {
     .setTitle('Delivery Tracking System')
     .setDescription('The Delivery Tracking System API description')
     .setVersion('0.1')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

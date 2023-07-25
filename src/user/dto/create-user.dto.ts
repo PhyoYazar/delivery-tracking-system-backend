@@ -1,51 +1,51 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
 import {
-  IsLowercase,
+  IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
-  Min,
-  min,
+  MinLength,
 } from 'class-validator';
 
-export class SignUpDto {
+export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
   name: string;
 
-  @IsString()
+  @IsEmail()
   @IsNotEmpty()
-  @IsLowercase()
   @ApiProperty()
   email: string;
 
-  @IsString()
   @IsNotEmpty()
+  @MinLength(6)
   @ApiProperty()
-  @Min(6)
   password: string;
 
   @IsString()
-  @IsNotEmpty()
   @ApiProperty()
-  role: 'deliver' | 'admin' | 'super_admin';
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
   phone_number: string;
 
   @IsString()
   @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   address: string;
 
   @IsString()
-  @ApiProperty({ required: false })
-  township: string;
+  @IsOptional()
+  @ApiProperty()
+  city_id: string;
 
   @IsString()
-  @ApiProperty({ required: false })
-  city: string;
+  @IsOptional()
+  @ApiProperty()
+  township_id: string;
+
+  @IsEnum(Role)
+  @IsOptional()
+  @ApiProperty()
+  role: Role;
 }

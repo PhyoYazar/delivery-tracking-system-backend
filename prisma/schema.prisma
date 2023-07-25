@@ -72,18 +72,17 @@ model User {
   name         String
   email        String        @unique
   password     String
-  refresh_token      String?
   phone_number String?
 
   address      String?
 
   city         City?          @relation(fields: [city_id], references: [id])
-  city_id      String
+  city_id      String?
 
   township     Township?      @relation(fields: [township_id], references: [id])
-  township_id  String
+  township_id  String?
 
-  role         Role
+  role         Role           @default(deliver)
   parcels      Parcel[]
 }
 
