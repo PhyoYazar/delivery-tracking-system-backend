@@ -44,6 +44,33 @@ async function main() {
     },
   });
 
+  const sanChaungTownship = await prisma.township.upsert({
+    where: { name: 'San Chaung' },
+    update: {},
+    create: {
+      name: 'San Chaung',
+      city_id: yangonCity.id,
+    },
+  });
+
+  const dawbonTownship = await prisma.township.upsert({
+    where: { name: 'Dawbon' },
+    update: {},
+    create: {
+      name: 'Dawbon',
+      city_id: yangonCity.id,
+    },
+  });
+
+  const kyautTaTarTownship = await prisma.township.upsert({
+    where: { name: 'Kyaut Ta Tar' },
+    update: {},
+    create: {
+      name: 'Kyaut Ta Tar',
+      city_id: yangonCity.id,
+    },
+  });
+
   const aloneTownship = await prisma.township.upsert({
     where: { name: 'Alone' },
     update: {},

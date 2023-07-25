@@ -18,7 +18,10 @@ export class SenderService {
   }
 
   findOne(id: string) {
-    return this.prisma.sender.findUnique({ where: { id } });
+    return this.prisma.sender.findUnique({
+      where: { id },
+      include: { parcels: true },
+    });
   }
 
   update(id: string, updateSenderDto: UpdateSenderDto) {

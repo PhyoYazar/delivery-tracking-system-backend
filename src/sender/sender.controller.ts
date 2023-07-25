@@ -40,7 +40,7 @@ export class SenderController {
     const sender = await this.senderService.findOne(id);
 
     if (!sender) {
-      throw new NotFoundException(`Parcel with id: ${id} not found`);
+      throw new NotFoundException(`Sender with id: ${id} not found`);
     }
 
     return sender;

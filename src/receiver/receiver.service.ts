@@ -18,7 +18,10 @@ export class ReceiverService {
   }
 
   findOne(id: string) {
-    return this.prisma.receiver.findUnique({ where: { id } });
+    return this.prisma.receiver.findUnique({
+      where: { id },
+      include: { parcels: true },
+    });
   }
 
   update(id: string, updateReceiverDto: UpdateReceiverDto) {

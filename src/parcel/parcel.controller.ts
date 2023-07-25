@@ -39,7 +39,6 @@ export class ParcelController {
   @Get(':id')
   @ApiCreatedResponse({ type: ParcelEntity })
   async findOne(@Param('id') id: string) {
-    console.log('id', id);
     const parcel = await this.parcelService.findOne(id);
 
     if (!parcel) {

@@ -40,7 +40,7 @@ export class ReceiverController {
     const receiver = await this.receiverService.findOne(id);
 
     if (!receiver) {
-      throw new NotFoundException(`Parcel with id: ${id} not found`);
+      throw new NotFoundException(`Receiver with id: ${id} not found`);
     }
 
     return receiver;

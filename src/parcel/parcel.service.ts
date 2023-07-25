@@ -62,7 +62,14 @@ export class ParcelService {
   }
 
   findOne(id: string) {
-    return this.prisma.parcel.findUnique({ where: { id } });
+    return this.prisma.parcel.findUnique({
+      where: { id },
+      include: {
+        user: true,
+        sender: true,
+        receiver: true,
+      },
+    });
   }
 
   update(id: string, updateParcelDto: UpdateParcelDto) {
