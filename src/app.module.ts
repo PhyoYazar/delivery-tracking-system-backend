@@ -9,6 +9,8 @@ import { ReceiverModule } from './receiver/receiver.module';
 import { IamModule } from './iam/iam.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
+import { CityModule } from './city/city.module';
+import { TownshipModule } from './township/township.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { UserModule } from './user/user.module';
     ReceiverModule,
     IamModule,
     UserModule,
+    CityModule,
+    TownshipModule,
   ],
   controllers: [AppController],
   providers: [AppService],
