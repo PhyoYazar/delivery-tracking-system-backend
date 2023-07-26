@@ -112,7 +112,15 @@ export class AuthenticationService {
       throw new UnauthorizedException('Password does not match');
     }
 
-    return this.generateTokens(user);
+    const tokens = await this.generateTokens(user);
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      ...tokens,
+    };
   }
 
   // Refresh token
