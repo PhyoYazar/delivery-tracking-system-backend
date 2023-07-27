@@ -16,7 +16,12 @@ export class GetParcelDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
-  township?: string;
+  sender_township?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  receiver_township?: string;
 
   @IsNumber()
   @IsOptional()

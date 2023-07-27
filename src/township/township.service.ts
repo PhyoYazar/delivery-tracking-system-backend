@@ -12,11 +12,20 @@ export class TownshipService {
   }
 
   findAll() {
-    return this.prisma.township.findMany();
+    return this.prisma.township.findMany({
+      include: {
+        city: true,
+      },
+    });
   }
 
   findOne(id: string) {
-    return this.prisma.township.findUnique({ where: { id } });
+    return this.prisma.township.findUnique({
+      where: { id },
+      // include: {
+      //   city: true,
+      // },
+    });
   }
 
   update(id: string, updateTownshipDto: UpdateTownshipDto) {

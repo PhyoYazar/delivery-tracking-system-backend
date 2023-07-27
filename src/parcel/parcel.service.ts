@@ -28,20 +28,26 @@ export class ParcelService {
           {
             sender: {
               AND: filterSenderReceiverArray,
-              township: {
-                name: getParcelDto.township,
-              },
             },
           },
           {
             receiver: {
               AND: filterSenderReceiverArray,
-              township: {
-                name: getParcelDto.township,
-              },
             },
           },
         ],
+
+        sender: {
+          township: {
+            name: getParcelDto.sender_township,
+          },
+        },
+
+        receiver: {
+          township: {
+            name: getParcelDto.receiver_township,
+          },
+        },
 
         price: getParcelDto.price,
         picked_up: getParcelDto.picked_up,
@@ -55,8 +61,18 @@ export class ParcelService {
       },
 
       include: {
-        sender: true,
-        receiver: true,
+        sender: {
+          include: {
+            city: true,
+            township: true,
+          },
+        },
+        receiver: {
+          include: {
+            city: true,
+            township: true,
+          },
+        },
       },
     });
   }
