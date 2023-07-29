@@ -14,7 +14,12 @@ export class ReceiverService {
   }
 
   findAll() {
-    return this.prisma.receiver.findMany();
+    return this.prisma.receiver.findMany({
+      include: {
+        city: true,
+        township: true,
+      },
+    });
   }
 
   findOne(id: string) {

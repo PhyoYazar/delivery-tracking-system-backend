@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,6 +15,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
 import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
 import { UserEntity } from './entities/user.entity';
+import { GetUserDto } from './dto/get-user.dto';
 
 @Auth(AuthType.None)
 @Controller('user')
@@ -29,8 +31,8 @@ export class UserController {
 
   @Get()
   @ApiCreatedResponse({ type: UserEntity, isArray: true })
-  findAll() {
-    return this.userService.findAll();
+  findAll(@Query() getUserDto: GetUserDto) {
+    return this.userService.findAll(getUserDto);
   }
 
   @Get(':id')

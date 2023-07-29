@@ -14,7 +14,12 @@ export class SenderService {
   }
 
   findAll() {
-    return this.prisma.sender.findMany();
+    return this.prisma.sender.findMany({
+      include: {
+        city: true,
+        township: true,
+      },
+    });
   }
 
   findOne(id: string) {

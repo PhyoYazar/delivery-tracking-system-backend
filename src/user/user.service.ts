@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GetUserDto } from './dto/get-user.dto';
 
 @Injectable()
 export class UserService {
@@ -11,8 +12,25 @@ export class UserService {
     return 'Please use Sign Up route to create a new user!!';
   }
 
-  findAll() {
-    return this.prisma.user.findMany();
+  findAll(getUserDto: GetUserDto) {
+    return this.prisma.user.findMany({
+      where: {
+        name: {
+          contains: getUserDto.name,
+        },
+
+        email: {
+          contains: getUserDto.email,
+        },
+
+        role: getUserDto.role,
+      },
+
+      include: {
+        city: true,
+        township: true,
+      },
+    });
   }
 
   findOne(id: string) {
