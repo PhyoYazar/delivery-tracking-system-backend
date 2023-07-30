@@ -17,10 +17,22 @@ export class RefreshTokenIdsStorage
   onApplicationBootstrap() {
     //TODO: Ideally we should move this to the dedicated 'RedisModule'
     // instead of initiating the connection here
-    this.redisClient = new Redis({
-      host: 'localhost', // should use environment variable
-      port: 6379, // should use environment variable
-    });
+    this.redisClient = new Redis(
+      'rediss://red-cj37ag98g3n1jkhtsp8g:66GcYMRsqgQ6oLCpCHtHAkhXaICHmuOM@singapore-redis.render.com:6379',
+    );
+
+    // this.redisClient = new Redis({
+    //   host: 'localhost', // should use environment variable
+    //   port: 6379, // should use environment variable
+    // });
+
+    // this.redisClient = new Redis({
+    //   host: 'singapore-redis.render.com',
+    //   port: 6379,
+    //   username: 'red-cj37ag98g3n1jkhtsp8g',
+    //   password: '66GcYMRsqgQ6oLCpCHtHAkhXaICHmuOM',
+    //   // tls: {},
+    // });
   }
 
   onApplicationShutdown(signal?: string) {
