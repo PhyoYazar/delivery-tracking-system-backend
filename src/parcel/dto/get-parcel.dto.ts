@@ -29,6 +29,11 @@ export class GetParcelDto {
   @ApiProperty({ required: false })
   price?: number;
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  user_id?: string;
+
   @IsBoolean()
   @IsOptional()
   @Transform(

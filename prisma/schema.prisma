@@ -11,6 +11,7 @@ datasource db {
 }
 
 enum Role {
+  picker
   deliver
   admin
   super_admin
@@ -102,10 +103,10 @@ model Parcel {
   receiver              Receiver       @relation(fields: [receiver_id], references: [id],onDelete: Cascade, onUpdate: Cascade)
   receiver_id         String
 
-  user                  User?       @relation(fields: [user_id], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  user                  User?       @relation(fields: [user_id], references: [id])
   user_id               String?
 
-  location              Location?   @relation(fields: [location_id], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  location              Location?   @relation(fields: [location_id], references: [id])
   location_id           String?
 }
 

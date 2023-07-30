@@ -46,4 +46,9 @@ export class UpdateParcelsDto {
   )
   @ApiProperty({ required: false })
   finish?: boolean;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  user_id?: string | null;
 }

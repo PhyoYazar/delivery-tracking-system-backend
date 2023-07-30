@@ -50,6 +50,8 @@ export class ParcelService {
           },
         },
 
+        user_id: getParcelDto.user_id,
+
         price: getParcelDto.price,
         picked_up: getParcelDto.picked_up,
         arrived_warehouse: getParcelDto.arrived_warehouse,
@@ -107,6 +109,7 @@ export class ParcelService {
               arrived_warehouse: updateParcelsDto.arrived_warehouse,
               deliver: updateParcelsDto.deliver,
               finish: updateParcelsDto.finish,
+              user_id: updateParcelsDto.user_id,
             },
           });
         }),
