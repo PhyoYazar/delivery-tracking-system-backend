@@ -3,6 +3,7 @@ import { CreateParcelDto } from './dto/create-parcel.dto';
 import { UpdateParcelDto } from './dto/update-parcel.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetParcelDto } from './dto/get-parcel.dto';
+import { UpdateParcelsDto } from './dto/update-parcels.dto';
 
 @Injectable()
 export class ParcelService {
@@ -93,6 +94,31 @@ export class ParcelService {
       where: { id },
       data: updateParcelDto,
     });
+  }
+
+  async updateParcels(updateParcelsDto: UpdateParcelsDto) {
+    try {
+      const results = await Promise.all(
+        updateParcelsDto.parcels.map((parcelId) => {
+          return this.prisma.parcel.update({
+            where: { id: parcelId },
+            data: {
+              picked_up: updateParcelsDto.picked_up,
+              arrived_warehouse: updateParcelsDto.arrived_warehouse,
+              deliver: updateParcelsDto.deliver,
+              finish: updateParcelsDto.finish,
+            },
+          });
+        }),
+      );
+
+      return {
+        status: 'success',
+        data: results,
+      };
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   remove(id: string) {

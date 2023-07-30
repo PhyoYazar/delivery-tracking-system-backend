@@ -17,6 +17,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { PrismaClientExceptionFilter } from 'src/prisma-client-exception/prisma-client-exception.filter';
 import { ParcelEntity } from './entities/parcel.entity';
 import { GetParcelDto } from './dto/get-parcel.dto';
+import { UpdateParcelsDto } from './dto/update-parcels.dto';
 
 @Controller('parcels')
 @ApiTags('parcel')
@@ -28,6 +29,12 @@ export class ParcelController {
   @ApiCreatedResponse({ type: ParcelEntity })
   create(@Body() createParcelDto: CreateParcelDto) {
     return this.parcelService.create(createParcelDto);
+  }
+
+  @Patch('/updates')
+  @ApiCreatedResponse({ type: ParcelEntity })
+  updateParcels(@Query() updateParcelsDto: UpdateParcelsDto) {
+    return this.parcelService.updateParcels(updateParcelsDto);
   }
 
   @Get()
