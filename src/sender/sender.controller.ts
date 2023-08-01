@@ -15,6 +15,8 @@ import { UpdateSenderDto } from './dto/update-sender.dto';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { SenderEntity } from './entities/sender.entity';
 import { PrismaClientExceptionFilter } from 'src/prisma-client-exception/prisma-client-exception.filter';
+import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
+import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
 
 @Controller('sender')
 @ApiTags('sender')
@@ -22,12 +24,14 @@ import { PrismaClientExceptionFilter } from 'src/prisma-client-exception/prisma-
 export class SenderController {
   constructor(private readonly senderService: SenderService) {}
 
+  @Auth(AuthType.None)
   @Post()
   @ApiCreatedResponse({ type: SenderEntity })
   create(@Body() createSenderDto: CreateSenderDto) {
     return this.senderService.create(createSenderDto);
   }
 
+  @Auth(AuthType.None)
   @Get()
   @ApiCreatedResponse({ type: SenderEntity, isArray: true })
   findAll() {

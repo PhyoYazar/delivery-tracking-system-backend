@@ -19,6 +19,8 @@ import { ParcelEntity } from './entities/parcel.entity';
 import { GetParcelDto } from './dto/get-parcel.dto';
 import { UpdateParcelsDto } from './dto/update-parcels.dto';
 import { ActiveUser } from 'src/iam/decorators/active-user.decorator';
+import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
+import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
 
 @Controller('parcels')
 @ApiTags('parcel')
@@ -26,18 +28,14 @@ import { ActiveUser } from 'src/iam/decorators/active-user.decorator';
 export class ParcelController {
   constructor(private readonly parcelService: ParcelService) {}
 
+  @Auth(AuthType.None)
   @Post()
   @ApiCreatedResponse({ type: ParcelEntity })
   create(@Body() createParcelDto: CreateParcelDto) {
     return this.parcelService.create(createParcelDto);
   }
 
-  @Patch('/updates')
-  @ApiCreatedResponse({ type: ParcelEntity })
-  updateParcels(@Query() updateParcelsDto: UpdateParcelsDto) {
-    return this.parcelService.updateParcels(updateParcelsDto);
-  }
-
+  @Auth(AuthType.None)
   @Get()
   @ApiCreatedResponse({ type: ParcelEntity, isArray: true })
   findAll(@Query() getParcelDto: GetParcelDto) {
@@ -72,6 +70,12 @@ export class ParcelController {
     }
 
     return parcel;
+  }
+
+  @Patch('/updates')
+  @ApiCreatedResponse({ type: ParcelEntity })
+  updateParcels(@Query() updateParcelsDto: UpdateParcelsDto) {
+    return this.parcelService.updateParcels(updateParcelsDto);
   }
 
   @Patch(':id')

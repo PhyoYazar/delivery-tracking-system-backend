@@ -15,6 +15,8 @@ import { UpdateReceiverDto } from './dto/update-receiver.dto';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { ReceiverEntity } from './entities/receiver.entity';
 import { PrismaClientExceptionFilter } from 'src/prisma-client-exception/prisma-client-exception.filter';
+import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
+import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
 
 @Controller('receiver')
 @ApiTags('receiver')
@@ -22,12 +24,14 @@ import { PrismaClientExceptionFilter } from 'src/prisma-client-exception/prisma-
 export class ReceiverController {
   constructor(private readonly receiverService: ReceiverService) {}
 
+  @Auth(AuthType.None)
   @Post()
   @ApiCreatedResponse({ type: ReceiverEntity })
   create(@Body() createReceiverDto: CreateReceiverDto) {
     return this.receiverService.create(createReceiverDto);
   }
 
+  @Auth(AuthType.None)
   @Get()
   @ApiCreatedResponse({ type: ReceiverEntity, isArray: true })
   findAll() {
