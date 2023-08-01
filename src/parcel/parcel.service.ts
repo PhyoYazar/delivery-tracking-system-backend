@@ -92,8 +92,18 @@ export class ParcelService {
 
       include: {
         user: true,
-        sender: true,
-        receiver: true,
+        sender: {
+          include: {
+            city: true,
+            township: true,
+          },
+        },
+        receiver: {
+          include: {
+            city: true,
+            township: true,
+          },
+        },
       },
     });
   }
