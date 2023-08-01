@@ -18,6 +18,7 @@ import { PrismaClientExceptionFilter } from 'src/prisma-client-exception/prisma-
 import { ParcelEntity } from './entities/parcel.entity';
 import { GetParcelDto } from './dto/get-parcel.dto';
 import { UpdateParcelsDto } from './dto/update-parcels.dto';
+import { ActiveUser } from 'src/iam/decorators/active-user.decorator';
 
 @Controller('parcels')
 @ApiTags('parcel')
@@ -41,6 +42,24 @@ export class ParcelController {
   @ApiCreatedResponse({ type: ParcelEntity, isArray: true })
   findAll(@Query() getParcelDto: GetParcelDto) {
     return this.parcelService.findAll(getParcelDto);
+  }
+
+  @Get('/user')
+  @ApiCreatedResponse({ type: ParcelEntity })
+  async findParcelsByUser(
+    @ActiveUser('sub') sub: string,
+    @Query() getParcelDto: GetParcelDto,
+  ) {
+    const parcel = await this.parcelService.findParcelsByUser(
+      sub,
+      getParcelDto,
+    );
+
+    if (!parcel) {
+      throw new NotFoundException(`Parcel with User id: ${sub} not found`);
+    }
+
+    return parcel;
   }
 
   @Get(':id')

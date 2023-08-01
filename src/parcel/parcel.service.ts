@@ -80,6 +80,24 @@ export class ParcelService {
     });
   }
 
+  findParcelsByUser(userId: string, getParcelDto: GetParcelDto) {
+    return this.prisma.parcel.findMany({
+      where: {
+        user_id: userId,
+        picked_up: getParcelDto.picked_up,
+        arrived_warehouse: getParcelDto.arrived_warehouse,
+        deliver: getParcelDto.deliver,
+        finish: getParcelDto.finish,
+      },
+
+      include: {
+        user: true,
+        sender: true,
+        receiver: true,
+      },
+    });
+  }
+
   findOne(id: string) {
     return this.prisma.parcel.findUnique({
       where: { id },
