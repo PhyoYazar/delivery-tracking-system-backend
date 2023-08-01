@@ -88,6 +88,18 @@ export class ParcelService {
         arrived_warehouse: getParcelDto.arrived_warehouse,
         deliver: getParcelDto.deliver,
         finish: getParcelDto.finish,
+
+        sender: {
+          address: {
+            contains: getParcelDto.sender_address,
+          },
+        },
+
+        receiver: {
+          address: {
+            contains: getParcelDto.receiver_address,
+          },
+        },
       },
 
       include: {

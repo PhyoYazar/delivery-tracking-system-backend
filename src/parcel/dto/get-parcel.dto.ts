@@ -23,6 +23,16 @@ export class GetParcelDto {
   @ApiProperty({ required: false })
   receiver_township?: string;
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  sender_address?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  receiver_address?: string;
+
   @IsNumber()
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
