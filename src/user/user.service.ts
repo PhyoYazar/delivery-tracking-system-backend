@@ -29,6 +29,7 @@ export class UserService {
       include: {
         city: true,
         township: true,
+        parcels: true,
       },
     });
   }

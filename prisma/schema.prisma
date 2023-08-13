@@ -93,8 +93,10 @@ model Parcel {
   updated_at            DateTime      @updatedAt
   price                 Int
   picked_up             Boolean       @default(false)
+  accept_picked_up             Boolean       @default(false)
   arrived_warehouse     Boolean       @default(false)
   deliver               Boolean       @default(false)
+  accept_deliver               Boolean       @default(false)
   finish                Boolean       @default(false)
 
   sender                Sender       @relation(fields: [sender_id], references: [id],onDelete: Cascade, onUpdate: Cascade)

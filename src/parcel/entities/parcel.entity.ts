@@ -18,10 +18,16 @@ export class ParcelEntity implements Parcel {
   picked_up: boolean;
 
   @ApiProperty()
+  accept_picked_up: boolean;
+
+  @ApiProperty()
   arrived_warehouse: boolean;
 
   @ApiProperty()
   deliver: boolean;
+
+  @ApiProperty()
+  accept_deliver: boolean;
 
   @ApiProperty()
   finish: boolean;
