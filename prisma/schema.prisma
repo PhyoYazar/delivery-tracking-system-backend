@@ -77,11 +77,11 @@ model User {
 
   address      String?
 
-  city         City?          @relation(fields: [city_id], references: [id])
-  city_id      String?
+  city         City          @relation(fields: [city_id], references: [id])
+  city_id      String
 
-  township     Township?      @relation(fields: [township_id], references: [id])
-  township_id  String?
+  township     Township      @relation(fields: [township_id], references: [id])
+  township_id  String
 
   role         Role           @default(deliver)
   parcels      Parcel[]
@@ -91,7 +91,9 @@ model Parcel {
   id                    String        @id     @default(uuid())
   created_at            DateTime      @default(now())
   updated_at            DateTime      @updatedAt
-  price                 Int
+  price                 Int?
+  name                  String?
+  description           String?
   picked_up             Boolean       @default(false)
   accept_picked_up             Boolean       @default(false)
   arrived_warehouse     Boolean       @default(false)

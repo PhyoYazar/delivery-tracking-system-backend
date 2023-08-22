@@ -21,6 +21,7 @@ import { UpdateParcelsDto } from './dto/update-parcels.dto';
 import { ActiveUser } from 'src/iam/decorators/active-user.decorator';
 import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
 import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
+import { Role } from '@prisma/client';
 
 @Controller('parcels')
 @ApiTags('parcel')
@@ -76,6 +77,13 @@ export class ParcelController {
   @ApiCreatedResponse({ type: ParcelEntity })
   updateParcels(@Query() updateParcelsDto: UpdateParcelsDto) {
     return this.parcelService.updateParcels(updateParcelsDto);
+  }
+
+  @Auth(AuthType.None)
+  @Patch('/auto-assign/:id')
+  @ApiCreatedResponse({ type: ParcelEntity })
+  updateAssignee(@Param('id') id: string, @Body() data: { role: Role }) {
+    return this.parcelService.autoAssign(id, data.role);
   }
 
   @Patch(':id')

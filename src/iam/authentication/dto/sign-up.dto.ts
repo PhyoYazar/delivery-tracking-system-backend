@@ -23,4 +23,14 @@ export class SignUpDto {
   @IsString()
   @ApiProperty()
   phone_number: string;
+
+  @IsString()
+  @ApiProperty()
+  @IsOptional()
+  city_id: string;
+
+  @IsString()
+  @ApiProperty()
+  @IsOptional()
+  township_id: string;
 }

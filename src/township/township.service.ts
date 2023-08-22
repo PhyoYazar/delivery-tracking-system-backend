@@ -15,6 +15,7 @@ export class TownshipService {
     return this.prisma.township.findMany({
       include: {
         city: true,
+        user: true,
       },
     });
   }

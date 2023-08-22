@@ -11,6 +11,16 @@ export class GetParcelDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
+  parcel_name?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  description?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
   phone_number?: string;
 
   @IsString()
@@ -57,6 +67,14 @@ export class GetParcelDto {
   @Transform(
     ({ value }) => [true, 'enabled', 'true', 1, '1'].indexOf(value) > -1,
   )
+  @ApiProperty({ required: false, type: Boolean })
+  accept_picked_up?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @Transform(
+    ({ value }) => [true, 'enabled', 'true', 1, '1'].indexOf(value) > -1,
+  )
   @ApiProperty({ required: false })
   arrived_warehouse?: boolean;
 
@@ -67,6 +85,14 @@ export class GetParcelDto {
   )
   @ApiProperty({ required: false })
   deliver?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @Transform(
+    ({ value }) => [true, 'enabled', 'true', 1, '1'].indexOf(value) > -1,
+  )
+  @ApiProperty({ required: false })
+  accept_deliver?: boolean;
 
   @IsBoolean()
   @IsOptional()

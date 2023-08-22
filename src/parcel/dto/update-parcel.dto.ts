@@ -18,6 +18,14 @@ export class UpdateParcelDto extends PartialType(CreateParcelDto) {
     ({ value }) => [true, 'enabled', 'true', 1, '1'].indexOf(value) > -1,
   )
   @ApiProperty({ required: false })
+  accept_picked_up?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @Transform(
+    ({ value }) => [true, 'enabled', 'true', 1, '1'].indexOf(value) > -1,
+  )
+  @ApiProperty({ required: false })
   arrived_warehouse?: boolean;
 
   @IsBoolean()
@@ -27,6 +35,14 @@ export class UpdateParcelDto extends PartialType(CreateParcelDto) {
   )
   @ApiProperty({ required: false })
   deliver?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @Transform(
+    ({ value }) => [true, 'enabled', 'true', 1, '1'].indexOf(value) > -1,
+  )
+  @ApiProperty({ required: false })
+  accept_deliver?: boolean;
 
   @IsBoolean()
   @IsOptional()

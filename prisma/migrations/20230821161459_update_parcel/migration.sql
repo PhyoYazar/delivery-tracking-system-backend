@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('deliver', 'admin', 'super_admin');
+CREATE TYPE "Role" AS ENUM ('picker', 'deliver', 'admin', 'super_admin');
 
 -- CreateTable
 CREATE TABLE "Article" (
@@ -50,12 +50,11 @@ CREATE TABLE "User" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "refresh_token" TEXT,
     "phone_number" TEXT,
     "address" TEXT,
-    "city_id" TEXT NOT NULL,
-    "township_id" TEXT NOT NULL,
-    "role" "Role" NOT NULL,
+    "city_id" TEXT,
+    "township_id" TEXT,
+    "role" "Role" NOT NULL DEFAULT 'deliver',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -66,9 +65,13 @@ CREATE TABLE "Parcel" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "price" INTEGER NOT NULL,
+    "name" TEXT,
+    "description" TEXT,
     "picked_up" BOOLEAN NOT NULL DEFAULT false,
+    "accept_picked_up" BOOLEAN NOT NULL DEFAULT false,
     "arrived_warehouse" BOOLEAN NOT NULL DEFAULT false,
     "deliver" BOOLEAN NOT NULL DEFAULT false,
+    "accept_deliver" BOOLEAN NOT NULL DEFAULT false,
     "finish" BOOLEAN NOT NULL DEFAULT false,
     "sender_id" TEXT NOT NULL,
     "receiver_id" TEXT NOT NULL,
@@ -140,10 +143,10 @@ ALTER TABLE "Receiver" ADD CONSTRAINT "Receiver_city_id_fkey" FOREIGN KEY ("city
 ALTER TABLE "Receiver" ADD CONSTRAINT "Receiver_township_id_fkey" FOREIGN KEY ("township_id") REFERENCES "Township"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "City"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "User" ADD CONSTRAINT "User_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "City"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_township_id_fkey" FOREIGN KEY ("township_id") REFERENCES "Township"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "User" ADD CONSTRAINT "User_township_id_fkey" FOREIGN KEY ("township_id") REFERENCES "Township"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_sender_id_fkey" FOREIGN KEY ("sender_id") REFERENCES "Sender"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -152,10 +155,10 @@ ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_sender_id_fkey" FOREIGN KEY ("sender
 ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_receiver_id_fkey" FOREIGN KEY ("receiver_id") REFERENCES "Receiver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "Location"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Parcel" ADD CONSTRAINT "Parcel_location_id_fkey" FOREIGN KEY ("location_id") REFERENCES "Location"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Township" ADD CONSTRAINT "Township_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "City"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -15,6 +15,12 @@ export class ParcelEntity implements Parcel {
   price: number;
 
   @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  description: string;
+
+  @ApiProperty()
   picked_up: boolean;
 
   @ApiProperty()

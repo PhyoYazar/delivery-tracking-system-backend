@@ -70,6 +70,8 @@ export class AuthenticationService {
 
   // Sign Up
   async signUp(signUpDto: SignUpDto) {
+    console.log(signUpDto);
+
     try {
       const hashPassword = await this.hashingService.hash(signUpDto.password);
 

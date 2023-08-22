@@ -1,10 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateParcelDto {
-  @IsNumber()
+  // @IsNumber()
+  // @ApiProperty()
+  // price: number;
+
+  @IsString()
   @ApiProperty()
-  price: number;
+  name: string;
+
+  @IsString()
+  @ApiProperty()
+  @IsOptional()
+  description?: string;
 
   @IsString()
   @ApiProperty()
