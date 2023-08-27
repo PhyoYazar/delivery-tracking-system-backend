@@ -185,8 +185,19 @@ export class ParcelService {
         `There is no assignee found who lives in ${township_name}`,
       );
     }
+
     // 3. check who picker have less than 5 parcels to deliver
-    return assignee.find((assignee) => assignee.parcels.length < 5);
+    return assignee.find((assignee) => {
+      const activeParcels = assignee.parcels.filter((p) => {
+        if (role === 'picker') {
+          return p.accept_picked_up && !p.arrived_warehouse;
+        } else {
+          return p.accept_deliver && !p.finish;
+        }
+      });
+
+      return activeParcels.length < 5;
+    });
   }
 
   async assignPicker(id: string, role: Role) {
@@ -206,7 +217,7 @@ export class ParcelService {
       });
     }
     if (!assignee) {
-      throw new NotFoundException(`Sender is not found!`);
+      throw new NotFoundException(`Assignee is not found!`);
     }
 
     const assignPicker = await this.findPickers(
