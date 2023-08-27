@@ -42,6 +42,9 @@ export class ParcelEntity implements Parcel {
   sender_id: string;
 
   @ApiProperty()
+  pickerId: string;
+
+  @ApiProperty()
   receiver_id: string;
 
   @ApiProperty({ required: false, nullable: true })

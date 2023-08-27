@@ -43,6 +43,11 @@ export class GetParcelDto {
   @ApiProperty({ required: false })
   receiver_address?: string;
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  pickerId?: string;
+
   @IsNumber()
   @IsOptional()
   @Transform(({ value }) => parseInt(value))

@@ -309,6 +309,7 @@ export class ParcelService {
         },
 
         user_id: getParcelDto.user_id,
+        pickerId: getParcelDto.pickerId,
 
         price: getParcelDto.price,
         picked_up: getParcelDto.picked_up,
@@ -412,6 +413,7 @@ export class ParcelService {
               deliver: updateParcelsDto.deliver,
               finish: updateParcelsDto.finish,
               user_id: updateParcelsDto.user_id,
+              pickerId: updateParcelsDto.pickerId,
             },
           });
         }),

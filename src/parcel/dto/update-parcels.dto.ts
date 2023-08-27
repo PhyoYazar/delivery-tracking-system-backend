@@ -67,4 +67,9 @@ export class UpdateParcelsDto {
   @IsOptional()
   @ApiProperty({ required: false })
   user_id?: string | null;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  pickerId?: string | null;
 }

@@ -105,7 +105,9 @@ model Parcel {
   sender_id             String
 
   receiver              Receiver       @relation(fields: [receiver_id], references: [id],onDelete: Cascade, onUpdate: Cascade)
-  receiver_id         String
+  receiver_id           String
+
+  pickerId              String?
 
   user                  User?       @relation(fields: [user_id], references: [id])
   user_id               String?
