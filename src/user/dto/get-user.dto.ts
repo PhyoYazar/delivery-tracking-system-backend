@@ -17,4 +17,9 @@ export class GetUserDto {
   @IsOptional()
   @ApiProperty()
   role: Role;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  township_id: string;
 }

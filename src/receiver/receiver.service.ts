@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateReceiverDto } from './dto/create-receiver.dto';
 import { UpdateReceiverDto } from './dto/update-receiver.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GetReceiverDto } from './dto/get-receiver.dto';
 
 @Injectable()
 export class ReceiverService {
@@ -13,8 +14,11 @@ export class ReceiverService {
     });
   }
 
-  findAll() {
+  findAll(getReceiverDto: GetReceiverDto) {
     return this.prisma.receiver.findMany({
+      where: {
+        township_id: getReceiverDto.township_id,
+      },
       include: {
         city: true,
         township: true,

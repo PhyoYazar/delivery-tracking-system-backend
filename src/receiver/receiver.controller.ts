@@ -8,6 +8,7 @@ import {
   Delete,
   NotFoundException,
   UseFilters,
+  Query,
 } from '@nestjs/common';
 import { ReceiverService } from './receiver.service';
 import { CreateReceiverDto } from './dto/create-receiver.dto';
@@ -17,6 +18,7 @@ import { ReceiverEntity } from './entities/receiver.entity';
 import { PrismaClientExceptionFilter } from 'src/prisma-client-exception/prisma-client-exception.filter';
 import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
 import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
+import { GetReceiverDto } from './dto/get-receiver.dto';
 
 @Controller('receiver')
 @ApiTags('receiver')
@@ -34,8 +36,8 @@ export class ReceiverController {
   @Auth(AuthType.None)
   @Get()
   @ApiCreatedResponse({ type: ReceiverEntity, isArray: true })
-  findAll() {
-    return this.receiverService.findAll();
+  findAll(@Query() getReceiverDto: GetReceiverDto) {
+    return this.receiverService.findAll(getReceiverDto);
   }
 
   @Get(':id')

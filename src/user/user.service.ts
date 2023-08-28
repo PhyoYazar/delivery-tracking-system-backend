@@ -24,6 +24,7 @@ export class UserService {
         },
 
         role: getUserDto.role,
+        township_id: getUserDto.township_id,
       },
 
       include: {

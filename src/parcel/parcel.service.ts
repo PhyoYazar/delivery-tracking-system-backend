@@ -284,14 +284,49 @@ export class ParcelService {
     return this.prisma.parcel.findMany({
       where: {
         OR: [
+          // {
+          //   sender: {
+          //     AND: filterSenderReceiverArray,
+          //   },
+          // },
+          // {
+          //   receiver: {
+          //     AND: filterSenderReceiverArray,
+          //   },
+          // },
+
+          {
+            name: {
+              contains: getParcelDto.keyword,
+              mode: 'insensitive',
+            },
+          },
           {
             sender: {
-              AND: filterSenderReceiverArray,
+              name: {
+                contains: getParcelDto.keyword,
+              },
+            },
+          },
+          {
+            sender: {
+              phone_number: {
+                contains: getParcelDto.keyword,
+              },
             },
           },
           {
             receiver: {
-              AND: filterSenderReceiverArray,
+              name: {
+                contains: getParcelDto.keyword,
+              },
+            },
+          },
+          {
+            receiver: {
+              phone_number: {
+                contains: getParcelDto.keyword,
+              },
             },
           },
         ],
@@ -311,6 +346,7 @@ export class ParcelService {
         user_id: getParcelDto.user_id,
         pickerId: getParcelDto.pickerId,
 
+        name: getParcelDto.name,
         price: getParcelDto.price,
         picked_up: getParcelDto.picked_up,
         accept_picked_up: getParcelDto.accept_picked_up,

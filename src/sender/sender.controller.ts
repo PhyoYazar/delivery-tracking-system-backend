@@ -8,6 +8,7 @@ import {
   Delete,
   NotFoundException,
   UseFilters,
+  Query,
 } from '@nestjs/common';
 import { SenderService } from './sender.service';
 import { CreateSenderDto } from './dto/create-sender.dto';
@@ -17,6 +18,7 @@ import { SenderEntity } from './entities/sender.entity';
 import { PrismaClientExceptionFilter } from 'src/prisma-client-exception/prisma-client-exception.filter';
 import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
 import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
+import { GetSenderDto } from './dto/get-sender.dto';
 
 @Controller('sender')
 @ApiTags('sender')
@@ -34,8 +36,8 @@ export class SenderController {
   @Auth(AuthType.None)
   @Get()
   @ApiCreatedResponse({ type: SenderEntity, isArray: true })
-  findAll() {
-    return this.senderService.findAll();
+  findAll(@Query() getSenderDto: GetSenderDto) {
+    return this.senderService.findAll(getSenderDto);
   }
 
   @Get(':id')

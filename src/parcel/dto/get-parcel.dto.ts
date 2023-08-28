@@ -11,6 +11,11 @@ export class GetParcelDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
+  keyword?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
   parcel_name?: string;
 
   @IsString()
