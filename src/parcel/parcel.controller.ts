@@ -22,6 +22,7 @@ import { ActiveUser } from 'src/iam/decorators/active-user.decorator';
 import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
 import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
 import { Role } from '@prisma/client';
+import { GetParcelTrackDto } from './dto/get-parcel-track.dto';
 
 @Controller('parcels')
 @ApiTags('parcel')
@@ -41,6 +42,13 @@ export class ParcelController {
   @ApiCreatedResponse({ type: ParcelEntity, isArray: true })
   findAll(@Query() getParcelDto: GetParcelDto) {
     return this.parcelService.findAll(getParcelDto);
+  }
+
+  @Auth(AuthType.None)
+  @Get('/track')
+  @ApiCreatedResponse({ type: ParcelEntity, isArray: true })
+  trackParcels(@Query() getParcelTrackDto: GetParcelTrackDto) {
+    return this.parcelService.trackParcel(getParcelTrackDto);
   }
 
   @Get('/user')

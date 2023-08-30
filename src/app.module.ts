@@ -11,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { CityModule } from './city/city.module';
 import { TownshipModule } from './township/township.module';
+import { TimelineModule } from './timeline/timeline.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { TownshipModule } from './township/township.module';
     UserModule,
     CityModule,
     TownshipModule,
+    TimelineModule,
   ],
   controllers: [AppController],
   providers: [AppService],

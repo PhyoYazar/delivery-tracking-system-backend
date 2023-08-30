@@ -4,7 +4,8 @@ import { UpdateParcelDto } from './dto/update-parcel.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetParcelDto } from './dto/get-parcel.dto';
 import { UpdateParcelsDto } from './dto/update-parcels.dto';
-import { Role } from '@prisma/client';
+import { Role, TimelineType } from '@prisma/client';
+import { GetParcelTrackDto } from './dto/get-parcel-track.dto';
 
 @Injectable()
 export class ParcelService {
@@ -268,33 +269,51 @@ export class ParcelService {
   }
 
   async create(createParcelDto: CreateParcelDto) {
-    return this.prisma.parcel.create({
+    const parcel = await this.prisma.parcel.create({
       data: createParcelDto,
     });
+
+    await this.prisma.timeline.create({
+      data: { type: TimelineType.booking, parcel_id: parcel.id },
+    });
+
+    return parcel;
   }
 
-  findAll(getParcelDto: GetParcelDto) {
+  trackParcel(getParcelTrackDto: GetParcelTrackDto) {
     const filterSenderReceiverArray = [
-      { name: getParcelDto.name },
+      { name: getParcelTrackDto.customer_name },
       {
-        phone_number: getParcelDto.phone_number,
+        phone_number: getParcelTrackDto.phone_number,
       },
     ];
 
     return this.prisma.parcel.findMany({
       where: {
         OR: [
-          // {
-          //   sender: {
-          //     AND: filterSenderReceiverArray,
-          //   },
-          // },
-          // {
-          //   receiver: {
-          //     AND: filterSenderReceiverArray,
-          //   },
-          // },
+          {
+            sender: {
+              AND: filterSenderReceiverArray,
+            },
+          },
+          {
+            receiver: {
+              AND: filterSenderReceiverArray,
+            },
+          },
+        ],
+      },
 
+      include: {
+        timeline: true,
+      },
+    });
+  }
+
+  findAll(getParcelDto: GetParcelDto) {
+    return this.prisma.parcel.findMany({
+      where: {
+        OR: [
           {
             name: {
               contains: getParcelDto.keyword,
@@ -361,6 +380,8 @@ export class ParcelService {
       },
 
       include: {
+        timeline: true,
+
         sender: {
           include: {
             city: true,

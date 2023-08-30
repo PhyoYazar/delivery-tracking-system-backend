@@ -17,6 +17,14 @@ enum Role {
   super_admin
 }
 
+enum TimelineType {
+  booking
+  start_pick_up
+  arrive_warehouse
+  start_deliver
+  finish
+}
+
 model Article {
   id          Int           @id @default(autoincrement())
   title       String        @unique
@@ -114,6 +122,8 @@ model Parcel {
 
   location              Location?   @relation(fields: [location_id], references: [id])
   location_id           String?
+
+  timeline              Timeline[]
 }
 
 model Location {
@@ -152,4 +162,15 @@ model City {
   user              User[]
   sender            Sender[]
   receiver          Receiver[]
+}
+
+model Timeline {
+  id                String        @id               @default(uuid())
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+
+  type              TimelineType
+
+  parcel            Parcel        @relation(fields: [parcel_id], references: [id])
+  parcel_id         String
 }
