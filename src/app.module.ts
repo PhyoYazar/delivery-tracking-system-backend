@@ -12,6 +12,7 @@ import { UserModule } from './user/user.module';
 import { CityModule } from './city/city.module';
 import { TownshipModule } from './township/township.module';
 import { TimelineModule } from './timeline/timeline.module';
+import { TaskSchedulerModule } from './task-scheduler/task-scheduler.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { TimelineModule } from './timeline/timeline.module';
     CityModule,
     TownshipModule,
     TimelineModule,
+    TaskSchedulerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

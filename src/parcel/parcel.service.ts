@@ -6,6 +6,10 @@ import { GetParcelDto } from './dto/get-parcel.dto';
 import { UpdateParcelsDto } from './dto/update-parcels.dto';
 import { Role, TimelineType } from '@prisma/client';
 import { GetParcelTrackDto } from './dto/get-parcel-track.dto';
+// import * as cron from 'node-cron';
+
+let pickerStore: string[] = [];
+let deliverStore: string[] = [];
 
 @Injectable()
 export class ParcelService {
@@ -175,20 +179,43 @@ export class ParcelService {
 
   async findPickers(township_id: string, township_name: string, role: Role) {
     // 2. find picker by sender's township_id
-    const assignee = await this.prisma.user.findMany({
+    const assignees = await this.prisma.user.findMany({
       where: { township: { id: township_id }, role },
       include: {
         parcels: true,
       },
     });
-    if (!assignee) {
+
+    if (!assignees) {
       throw new NotFoundException(
         `There is no assignee found who lives in ${township_name}`,
       );
     }
 
+    if (role === 'picker') {
+      if (assignees.length === pickerStore.length) {
+        pickerStore = [];
+      }
+    }
+    if (role === 'deliver') {
+      if (assignees.length === deliverStore.length) {
+        deliverStore = [];
+      }
+    }
+
+    console.log('STORE ==> ', pickerStore, deliverStore);
+    console.log(assignees.map((a) => ({ name: a.name, id: a.id })));
+
     // 3. check who picker have less than 5 parcels to deliver
-    return assignee.find((assignee) => {
+    const assignUser = assignees.find((assignee) => {
+      if (role === 'picker') {
+        if (pickerStore.includes(assignee.id)) return false;
+      }
+
+      if (role === 'deliver') {
+        if (deliverStore.includes(assignee.id)) return false;
+      }
+
       const activeParcels = assignee.parcels.filter((p) => {
         if (role === 'picker') {
           return p.accept_picked_up && !p.arrived_warehouse;
@@ -199,6 +226,19 @@ export class ParcelService {
 
       return activeParcels.length < 5;
     });
+
+    if (assignUser) {
+      if (role === 'picker') {
+        pickerStore.push(assignUser.id);
+      }
+      if (role === 'deliver') {
+        deliverStore.push(assignUser.id);
+      }
+    }
+
+    console.log('assignUser => ', assignUser.name, assignUser.id);
+
+    return assignUser;
   }
 
   async assignPicker(id: string, role: Role) {
@@ -226,6 +266,8 @@ export class ParcelService {
       assignee.township.name,
       role,
     );
+
+    console.log('assignnPIcker => ', assignPicker.name, assignPicker.id);
 
     // // 4. if every picker are busy, find the picker who is the nearest township
     // if (assignPicker === undefined) {
@@ -257,15 +299,100 @@ export class ParcelService {
       role,
     );
 
+    console.log('autoASSIGN => ', assignee.name, assignee.id);
+
     if (!assignee)
       throw new NotFoundException(
         'There is no assignee who can pick up the parcel',
       );
 
+    this.scheduler(parcelId, role);
+
     return this.prisma.parcel.update({
       where: { id: parcelId },
       data: { user_id: assignee.id },
     });
+  }
+
+  scheduler(parcelId: string, role: Role) {
+    // const task = cron.schedule('*/3 * * * * *', () => {
+    // console.log('running')
+    // });
+
+    //! Need to find the bug that is setInterval are duplicating ...
+
+    const time = setInterval(async () => {
+      console.log`======`;
+      console.log('START scheduler -> ', pickerStore, deliverStore);
+      console.log`======`;
+
+      // 0. get parcel by parcel_id
+      // 1. check accept_picked_up/accept_deliver is still false or not
+      // 2. if true, don't perform any action any more, return quit it
+      // 3. if false, add user_id into store
+      // 4. call autoAssign action
+
+      // 0. get parcel by parcel_id
+      const parcel = await this.findOne(parcelId);
+      if (!parcel) {
+        stopSchedule();
+        return;
+      }
+
+      // 1. check accept_picked_up/accept_deliver is still false or not
+      // 2. if true, don't perform any action any more, return quit it
+      // 3. if false, add user_id into store
+      // 4. call autoAssign action
+
+      if (role === 'picker') {
+        if (parcel.accept_picked_up) {
+          stopSchedule();
+          console.log('Picker accept the parcel');
+          return;
+        }
+
+        // pickerStore.push(parcel.user_id);
+        this.autoAssign(parcel.id, 'picker');
+      }
+
+      if (role === 'deliver') {
+        if (parcel.accept_deliver) {
+          stopSchedule();
+          console.log('Deliver accept the parcel');
+          return;
+        }
+
+        // deliverStore.push(parcel.user_id);
+        this.autoAssign(parcel.id, 'deliver');
+      }
+
+      if (!['deliver', 'picker'].includes(role)) {
+        stopSchedule();
+        return;
+      }
+    }, 1000 * 20);
+
+    // if (role === 'picker') {
+    //   if (pickerStore[0] === '$$') {
+    //     console.log('picker are full. STOP');
+    //     pickerStore = [];
+    //     // clearInterval(time);
+    //   }
+    // }
+
+    // if (role === 'deliver') {
+    //   if (deliverStore[0] === '$$') {
+    //     console.log('deliver are full. STOP');
+    //     deliverStore = [];
+    //     // clearInterval(time);
+    //   }
+    // }
+
+    function stopSchedule() {
+      console.log('stopp');
+      clearInterval(time);
+      // task.stop();
+    }
   }
 
   async create(createParcelDto: CreateParcelDto) {

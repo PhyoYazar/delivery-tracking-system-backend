@@ -4,8 +4,10 @@ import { ParcelController } from './parcel.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
+  // imports: [PrismaModule, forwardRef(() => TaskSchedulerModule)],
+  imports: [PrismaModule],
   controllers: [ParcelController],
   providers: [ParcelService],
-  imports: [PrismaModule],
+  exports: [ParcelService],
 })
 export class ParcelModule {}
