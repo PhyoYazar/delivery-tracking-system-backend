@@ -16,6 +16,16 @@ export class GetParcelDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
+  page?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  pageSize?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
   parcel_name?: string;
 
   @IsString()

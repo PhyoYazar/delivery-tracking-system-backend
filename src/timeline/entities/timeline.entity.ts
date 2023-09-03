@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Timeline, TimelineType } from '@prisma/client';
 
-export class Timeline {
+export class TimelineEntity implements Timeline {
   @ApiProperty()
   id: string;
 
@@ -11,7 +12,7 @@ export class Timeline {
   updated_at: Date;
 
   @ApiProperty()
-  type: string;
+  type: TimelineType;
 
   @ApiProperty()
   parcel_id: string;

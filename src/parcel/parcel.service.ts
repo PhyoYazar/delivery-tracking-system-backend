@@ -6,7 +6,7 @@ import { GetParcelDto } from './dto/get-parcel.dto';
 import { UpdateParcelsDto } from './dto/update-parcels.dto';
 import { Role, TimelineType } from '@prisma/client';
 import { GetParcelTrackDto } from './dto/get-parcel-track.dto';
-// import * as cron from 'node-cron';
+import * as cron from 'node-cron';
 
 let pickerStore: string[] = [];
 let deliverStore: string[] = [];
@@ -180,7 +180,7 @@ export class ParcelService {
   async findPickers(township_id: string, township_name: string, role: Role) {
     // 2. find picker by sender's township_id
     const assignees = await this.prisma.user.findMany({
-      where: { township: { id: township_id }, role },
+      where: { township_id, role },
       include: {
         parcels: true,
       },
@@ -191,6 +191,8 @@ export class ParcelService {
         `There is no assignee found who lives in ${township_name}`,
       );
     }
+
+    console.log(role, ' ', township_name);
 
     if (role === 'picker') {
       if (assignees.length === pickerStore.length) {
@@ -203,7 +205,6 @@ export class ParcelService {
       }
     }
 
-    console.log('STORE ==> ', pickerStore, deliverStore);
     console.log(assignees.map((a) => ({ name: a.name, id: a.id })));
 
     // 3. check who picker have less than 5 parcels to deliver
@@ -236,8 +237,6 @@ export class ParcelService {
       }
     }
 
-    console.log('assignUser => ', assignUser.name, assignUser.id);
-
     return assignUser;
   }
 
@@ -266,8 +265,6 @@ export class ParcelService {
       assignee.township.name,
       role,
     );
-
-    console.log('assignnPIcker => ', assignPicker.name, assignPicker.id);
 
     // // 4. if every picker are busy, find the picker who is the nearest township
     // if (assignPicker === undefined) {
@@ -299,14 +296,12 @@ export class ParcelService {
       role,
     );
 
-    console.log('autoASSIGN => ', assignee.name, assignee.id);
-
     if (!assignee)
       throw new NotFoundException(
         'There is no assignee who can pick up the parcel',
       );
 
-    this.scheduler(parcelId, role);
+    console.log('ASSIGN USER => ', assignee.name, assignee.id);
 
     return this.prisma.parcel.update({
       where: { id: parcelId },
@@ -314,17 +309,28 @@ export class ParcelService {
     });
   }
 
+  // testingCorn() {
+  //   console.log('call test function');
+  //   const hi = 'hi';
+
+  //   const testCorn = cron.schedule(
+  //     '*/10 * * * * *',
+  //     async () => {
+  //       console.log('corn scheduled is rrunning ', hi);
+  //     },
+  //     { scheduled: false },
+  //   );
+
+  //   testCorn.start();
+
+  //   setTimeout(() => {
+  //     testCorn.stop();
+  //   }, 1000 * 20);
+  // }
+
   scheduler(parcelId: string, role: Role) {
-    // const task = cron.schedule('*/3 * * * * *', () => {
-    // console.log('running')
-    // });
-
-    //! Need to find the bug that is setInterval are duplicating ...
-
-    const time = setInterval(async () => {
-      console.log`======`;
+    const task = cron.schedule('*/1 * * * *', async () => {
       console.log('START scheduler -> ', pickerStore, deliverStore);
-      console.log`======`;
 
       // 0. get parcel by parcel_id
       // 1. check accept_picked_up/accept_deliver is still false or not
@@ -332,17 +338,11 @@ export class ParcelService {
       // 3. if false, add user_id into store
       // 4. call autoAssign action
 
-      // 0. get parcel by parcel_id
       const parcel = await this.findOne(parcelId);
       if (!parcel) {
         stopSchedule();
         return;
       }
-
-      // 1. check accept_picked_up/accept_deliver is still false or not
-      // 2. if true, don't perform any action any more, return quit it
-      // 3. if false, add user_id into store
-      // 4. call autoAssign action
 
       if (role === 'picker') {
         if (parcel.accept_picked_up) {
@@ -370,28 +370,11 @@ export class ParcelService {
         stopSchedule();
         return;
       }
-    }, 1000 * 20);
-
-    // if (role === 'picker') {
-    //   if (pickerStore[0] === '$$') {
-    //     console.log('picker are full. STOP');
-    //     pickerStore = [];
-    //     // clearInterval(time);
-    //   }
-    // }
-
-    // if (role === 'deliver') {
-    //   if (deliverStore[0] === '$$') {
-    //     console.log('deliver are full. STOP');
-    //     deliverStore = [];
-    //     // clearInterval(time);
-    //   }
-    // }
+    });
 
     function stopSchedule() {
-      console.log('stopp');
-      clearInterval(time);
-      // task.stop();
+      console.log('stop');
+      task.stop();
     }
   }
 
@@ -438,6 +421,10 @@ export class ParcelService {
   }
 
   findAll(getParcelDto: GetParcelDto) {
+    const page = +getParcelDto.page ?? 1;
+    const pageSize = +getParcelDto.pageSize ?? 10;
+    const offset = (page - 1) * pageSize;
+
     return this.prisma.parcel.findMany({
       where: {
         OR: [
@@ -503,8 +490,13 @@ export class ParcelService {
       },
 
       orderBy: {
-        created_at: 'desc',
+        updated_at: 'desc',
       },
+
+      skip: 0,
+      take: 10,
+      // skip: offset,
+      // take: pageSize,
 
       include: {
         timeline: true,

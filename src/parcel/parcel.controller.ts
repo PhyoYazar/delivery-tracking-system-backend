@@ -94,6 +94,13 @@ export class ParcelController {
     return this.parcelService.autoAssign(id, data.role);
   }
 
+  @Auth(AuthType.None)
+  @Patch('/auto-assign/schedule/:id')
+  @ApiCreatedResponse({ type: ParcelEntity })
+  scheduler(@Param('id') id: string, @Body() data: { role: Role }) {
+    return this.parcelService.scheduler(id, data.role);
+  }
+
   @Patch(':id')
   @ApiCreatedResponse({ type: ParcelEntity })
   update(@Param('id') id: string, @Body() updateParcelDto: UpdateParcelDto) {
