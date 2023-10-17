@@ -28,10 +28,11 @@
 
 ## Setup
 
+```bash
 - create .env file
 - and copy all data from .env.example to the .env file
 - docker-compose up (or) docker compose up
--
+```
 
 ## Installation
 
