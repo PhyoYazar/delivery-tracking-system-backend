@@ -1,3 +1,12 @@
+
+## setup
+-> add .env
+-> docker compose up -d
+-> npx prisma migrate dev --name "init"
+-> npx prisma db seed
+-> create `super_admin` user first in route 'http://localhost:3333/auth/sign-up' with iam/authentication/dto
+
+
 ### prisma
 
 => npx prisma migrate dev --name "init"
@@ -16,3 +25,5 @@
 => npx nest generate controller (nest g co)
 => npx nest generate module prisma
 => npx nest generate service prisma
+
+
